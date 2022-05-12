@@ -236,9 +236,23 @@ def Chequeoduplicados2(numliquidacion, listasdelistas):     #un contador que mid
     return contador
 
 def chequeodatabase():
+    """
+    _summary_
+    Intenta abrir el archivo database.csv y de no poder ofrece crearlo.
+    funciona en windows y linux
+    pendiente:
+    *el programa no crea la carpeta config, la cual debe tener dentro el archivo database.csv, se podria crear una utilidad con
+    os para crear la carpeta y no tener que pedirle al usuario que la cree
+    """
     try:
+        if os.name == "nt" or os.name=="dos":
+            chequeoos='\\'
+            
+        elif os.name =="posix":
+            chequeoos='/'
+            
         onoffdatabase_close=1
-        with open("config\database.csv", "r") as infodatabase:
+        with open(f"config{chequeoos}database.csv", "r") as infodatabase:
             pass
 
     except FileNotFoundError:
@@ -248,9 +262,13 @@ def chequeodatabase():
         opcion=str(input("Elija una de las opciones:"))
         if opcion == "1" or opcion == "1-":
             try:
-                with open("config\database.csv", "w") as infodatabase:
+                with open(f"config{chequeoos}database.csv", "w") as infodatabase:
                     pass
 
+            
+            except FileNotFoundError as e:
+                print(f"\tError!!\nError de tipo:{type(e).__name__}\nCrear la carpeta 'config' antes de reiniciar\n--------------------------------------")
+                input("Presione ENTER para continuar\n")
             except Exception as e:
                 print(f"\tError!!\nError de tipo:{type(e).__name__}\n{e}\n--------------------------------------")
                 input("Presione ENTER para continuar\n")
