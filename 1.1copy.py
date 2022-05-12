@@ -1,17 +1,19 @@
-# \n <> \t []
+#!/bin/python3
 
 from datetime import datetime
-
 import time
 import os
 import csv
 
 
-
 def limpiarpantalla():
     if os.name=="nt" or os.name=="dos":
         comando="cls"
-    os.system(comando)
+        os.system(comando)
+
+    elif os.name=="posix":
+        comando="clear"
+        os.system(comando)
 
 def mostrarmenu():
 
@@ -271,6 +273,112 @@ def chequeodatabase():
         else:
             pass
 
+def fecha_actualvsingresada():
+    """
+    _summary_
+    solicita una fecha al usuario y la devuelve luego de controlar que sea futura a la fecha actual
+    no admite: 0, meses mayores a 12 ni dias mayores a 33
+    
+    pendiente:
+    *mejorar el limite de dias segun el mes del año selecciojado
+    *agregar boton de cancelar
+
+    Returns:
+        lista con enteros:[año, mes, dia]
+    """
+
+    fechasolicitada=[]
+
+    seguridadfechaposterior=0
+    
+    traba=1
+#----------------------------------------------------------------------------------------Año
+    while traba == 1:
+        
+        try:
+            entrada=input ('Digite el año:') 
+            añosolicitado=int(entrada)
+
+            if añosolicitado >= año_actual:
+              
+                fechasolicitada+=[añosolicitado]
+                
+                if añosolicitado > año_actual:
+                    seguridadfechaposterior=1
+                traba=2
+            else:
+                print ("El año podria ser menor al que indica el sistema como actual, se requiere verificar los datos")
+
+        except ValueError:
+            print (f"Digite el año en formato numerico \nEj:{año_actual}")
+            
+        except Exception as e:
+            print (f"   \tError!!\nError de tipo:{type(e).__name__}")
+          
+        finally:
+            pass
+
+#----------------------------------------------------------------------------------------Mes
+    while traba == 2:
+        try:
+            entrada=input ('Digite el mes:') 
+            messolicitado=int(entrada)
+
+            if messolicitado >= mes_actual and messolicitado <= 12 or seguridadfechaposterior == 1 and messolicitado > 0 and messolicitado < 13:
+                fechasolicitada+=[messolicitado]
+            
+                if messolicitado > mes_actual and seguridadfechaposterior == 0:
+                    seguridadfechaposterior=1
+                traba=3
+        
+            elif messolicitado == 0:
+                print ("El mes no puede tener valor de 0")
+                
+            elif messolicitado > 12:
+                print ("El mes no puede tener un valor mayor a 12")
+            
+            elif messolicitado < 0:
+                print ("El mes solicitado no puede ser negativo") 
+            else:
+                print ("El mes podria ser menor al que indica el sistema como actual, se requiere verificar los datos")
+
+        except ValueError:
+            print (f"Digite el mes en formato numerico \nEj:{mes_actual}")
+            
+        except Exception as e:
+            print (f"   \tError!!\nError de tipo:{type(e).__name__}")
+
+#----------------------------------------------------------------------------------------Dia
+    while traba == 3:
+        
+        try:
+            entrada=input ('Digite el dia:') 
+            diasolicitado=int(entrada)
+
+            if diasolicitado >= dia_actual and diasolicitado < 33 or seguridadfechaposterior == 1 and diasolicitado > 0 and diasolicitado < 33:
+                fechasolicitada+=[diasolicitado]
+                return fechasolicitada
+        
+            elif diasolicitado == 0:
+                print ("El dia no puede tener valor de 0")
+            
+            elif diasolicitado > 33:
+                print("El dia no puede tener un valor mayor a 33")
+                
+            elif diasolicitado <0:
+                print("El dia solicitado no puede ser negativo")
+            
+            else:
+                print ("El dia podria ser menor al que indica el sistema como actual, se requiere verificar los datos")
+
+        except ValueError:
+            print (f"Digite el dia en formato numerico \nEj:{dia_actual}")
+            
+        except Exception as e:
+            print (f"   \tError!!\nError de tipo:{type(e).__name__}")
+
+
+
 
 
 print("//////////////////////////////////")
@@ -302,9 +410,12 @@ while onoff==1:
         limpiarpantalla()
         print("1-Calcular el saldo que se tendra en una fecha x\n\n")
 
-        añosolicitado=int(input("Digite el año:"))
-        messolicitado=int(input("Digite el mes:"))
-        diasolicitado=int(input("Digite el dia:"))
+        fechaenlista=fecha_actualvsingresada()
+        
+        añosolicitado=fechaenlista[0]
+        messolicitado=fechaenlista[1]
+        diasolicitado=fechaenlista[2]
+        
         
         activofuturo=CalcularActivosfuturos(añosolicitado, messolicitado, diasolicitado)
 
