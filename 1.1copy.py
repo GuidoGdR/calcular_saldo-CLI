@@ -1,4 +1,4 @@
-#!/bin/python3
+
 
 from datetime import datetime
 import time
@@ -195,6 +195,11 @@ def CopiarLiquidaciones():                                #Retorna una lista con
                 liquidacionescopiadas+=[[añocopiado, mescopiado, diacopiado, montocopiado, numerodeliquidacion]]
 
             return liquidacionescopiadas
+    except FileNotFoundError as e:
+        print(f"\tError!!\nError de tipo:{type(e).__name__}\nEl arcivo 'Liquidación diaria.csv' no fue encontrado")
+        print("Depositar el archivo 'Liquidación diaria.csv' dentro de la carpeta 'config' del programa")
+        print("\n--------------------------------------")
+        input("Presione ENTER para continuar\n")
 
     except Exception as e:
         print(f"\tError!!\nError de tipo:{type(e).__name__}\n{e}\n--------------------------------------")
