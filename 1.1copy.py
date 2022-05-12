@@ -88,12 +88,18 @@ def Infodatabase():                                 #retorna una lista con lista
 
 def CalcularActivosfuturos(añoinput, mesinput, diainput):#se puede dividir o usar una funcion para acortar codigo (revsisar) #en base a la ficha de pasivos suma los pasivos anteriores a una fecha x 
     try:                                          #y posteriores a la fecha actual
+        if os.name == "nt" or os.name=="dos":
+            chequeoos='\\'
+            
+        elif os.name =="posix":
+            chequeoos='/'
+            
         fechaactual=datetime.now()
         diaactual=int(datetime.strftime(fechaactual,"%d"))
         mesactual=int(datetime.strftime(fechaactual,"%m"))
         añoactual=int(datetime.strftime(fechaactual,"%Y"))
         montoscopiados=0.0
-        with open("config\database.csv", "r") as archivoP:
+        with open(f"config{chequeoos}database.csv", "r") as archivoP:
             lector=csv.reader(archivoP, delimiter=";")
             for linea in lector:
                 añoleido=int(linea[0])
