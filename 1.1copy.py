@@ -1,6 +1,7 @@
 #!/bin/python3
 
 from datetime import datetime
+from distutils.log import info
 import time
 import os
 import csv
@@ -425,6 +426,33 @@ def fecha_actualvsingresada():
         except Exception as e:
             print (f"   \tError!!\nError de tipo:{type(e).__name__}")
 
+def SolicitarNuevoA ():
+    """
+    _summary_
+    Solicita un monto y controla que no sea menor que 0.01, un num. negativo o un str
+    
+    Returns:
+        Float: Monto/saledo/$$$ par el Activo
+    """
+
+    while 1 == 1:
+        try:
+            montosolicitado=float(input("Digite el monto:"))
+            if montosolicitado == 0:
+                print ("El monto solicitado no puede ser 0")
+
+            elif montosolicitado <= 0.009:
+                print ("El monto solicitado no puede ser menor que 0.01")
+
+            else:
+                return montosolicitado
+        
+        except ValueError as e:
+            print ("El programa no admite letras, ingrese el monto en numeros")
+            pass
+        
+        except Exception as e:
+            print (f"Error tipo:{type(e).__name__} \n", e)
 
 
 
@@ -478,10 +506,22 @@ while onoff==1:
         limpiarpantalla()
         print("2-Agregar un monto a la ficha de activos\n\n")
 
-        añosolicitado=int(input("Digite el año:"))
-        messolicitado=int(input("Digite el mes:"))
-        diasolicitado=int(input("Digite el dia:"))
-        montosolicitado=float(input("Digite el monto:"))                 #REVISAR
+
+
+        infodatabase=Infodatabase()
+        numerosdeseriedeDB=Solonumserie(infodatabase)
+
+        print (numerosdeseriedeDB)
+
+
+        fechaenlista=fecha_actualvsingresada()
+        
+        añosolicitado=fechaenlista[0]
+        messolicitado=fechaenlista[1]
+        diasolicitado=fechaenlista[2]
+
+        montosolicitado=SolicitarNuevoA ()
+
         numerodeliquidacionsolicitado=str(input("Digite el numero de liquidacion:")) #Es una especie de numero de serie para no repetir datos
 
         infodatabase=Infodatabase()
