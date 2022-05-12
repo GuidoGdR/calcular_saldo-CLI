@@ -1,4 +1,4 @@
-
+#!/bin/python3
 
 from datetime import datetime
 import time
@@ -30,7 +30,13 @@ def Delistastr(lista, caracter):
 
 def Escribirbasededatos(texto):                 #Escribe en la base de datos lo que le pasas en lugar de "texto"
     try:
-        with open("config\database.csv", "a", newline="")as archivoacsv:
+        if os.name == "nt" or os.name=="dos":
+            chequeoos='\\'
+            
+        elif os.name =="posix":
+            chequeoos='/'
+
+        with open(f"config{chequeoos}database.csv", "a", newline="")as archivoacsv:
             escritor=csv.writer(archivoacsv, delimiter=";")
             escritor.writerows(texto)
 
@@ -48,8 +54,14 @@ def Escribirbasededatos(texto):                 #Escribe en la base de datos lo 
 
 def Infodatabase():                                 #retorna una lista con listas de la info de la base de datos
     try:
+        if os.name == "nt" or os.name=="dos":
+            chequeoos='\\'
+            
+        elif os.name =="posix":
+            chequeoos='/'
+
         onoffdatabase_close=1
-        with open("config\database.csv", "r") as infodatabase:
+        with open(f"config{chequeoos}database.csv", "r") as infodatabase:
             lector=csv.reader(infodatabase, delimiter=";")
             datoscopiados=[]
 
@@ -139,7 +151,13 @@ def CalcularActivosfuturos(añoinput, mesinput, diainput):#se puede dividir o us
 
 def CopiarLiquidaciones():                                #Retorna una lista con sublistas de año-mes-dia-monto-numerodeliquidacion
     try:
-        with open("config\Liquidación diaria.csv", "r") as archivoL:
+        if os.name == "nt" or os.name=="dos":
+            chequeoos='\\'
+            
+        elif os.name =="posix":
+            chequeoos='/'
+
+        with open(f"config{chequeoos}Liquidación diaria.csv", "r") as archivoL:
             next(archivoL, None) #Evito la primera linea por ser encabezado
             lector=csv.reader(archivoL, delimiter=";")
             liquidacionescopiadas=[]
@@ -198,7 +216,8 @@ def CopiarLiquidaciones():                                #Retorna una lista con
     except FileNotFoundError as e:
         print(f"\tError!!\nError de tipo:{type(e).__name__}\nEl arcivo 'Liquidación diaria.csv' no fue encontrado")
         print("Depositar el archivo 'Liquidación diaria.csv' dentro de la carpeta 'config' del programa")
-        print("\n--------------------------------------")
+        print (e)
+        print("--------------------------------------")
         input("Presione ENTER para continuar\n")
 
     except Exception as e:
