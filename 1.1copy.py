@@ -41,7 +41,6 @@ def ExtraerporIndice(lista, indices):
     Returns:
         _[type]_: _description_Listado compuesto solo de los elementos espesificados con los indices
     """
-       
 
     resultado=[]
     for i in indices:
@@ -68,14 +67,14 @@ def deCSVaHuman(listaenlista):
         listarapida=i
 
         añorapido=str(listarapida[0])
-        añorapidoSTR=str(añorapido)
         
         mesrapido=str(listarapida[1])
         diarapido=str(listarapida[2])
-        montorapido=str(listarapida[3])
+        montorapido1=float(listarapida[3])
+
         liquidacionrapido=str(listarapida[4])
         
-        total+=añorapido + "/" + mesrapido + "/" + diarapido + "  $" + montorapido + "|ID: " + liquidacionrapido+ "\n"
+        total+=añorapido + "/" + mesrapido + "/" + diarapido + "  $" + f"{montorapido1:.2f}" + "|ID: " + liquidacionrapido+ "\n"
     return total
 
 def Escribirbasededatos(texto, m):                 #Escribe en la base de datos lo que le pasas en lugar de "texto"
@@ -516,10 +515,13 @@ def fecha_actualvsingresada():
         except Exception as e:
             print (f"   \tError!!\nError de tipo:{type(e).__name__}")
 
-def SolicitarNuevoA ():
+def SolicitarNuevoA():
     """
     _summary_
-    Solicita un monto y controla que no sea menor que 0.01, un num. negativo o un str
+    Solicita un monto y controla:
+    no sea menor que 0.01
+    no sea un num. negativo
+    no sea un un str
     
     Returns:
         Float: Monto/saledo/$$$ par el Activo
@@ -540,6 +542,52 @@ def SolicitarNuevoA ():
         except ValueError as e:
             print ("El programa no admite letras, ingrese el monto en numeros")
             pass
+        
+        except Exception as e:
+            print (f"Error tipo:{type(e).__name__} \n", e)
+
+def SolicitarNuevoP():
+    """
+    SolicitarNuevoA _summary_
+    
+    solicita un monto y chequea que:
+    *no se hayan ingresado str
+    *que no sea un monto menor a 0.009 sea negativo o positivo 
+    
+    *si el numero sea negativo:
+    de no serlo lo convertira 
+        
+    
+
+    Returns:
+        _Float_: _description_El monto listo para ingresar como pasivo a la lista y luego a la DB 
+    """
+
+
+    while 1 == 1:
+        try:
+            montosolicitado=float(input("Digite el monto:"))
+            
+            if montosolicitado > 0:
+                montosolicitado*=-1
+                if montosolicitado < -0.009:
+                    return montosolicitado
+                
+                else:
+                    print ("El monto no puede tener ser mas chico que 0.009")
+                    
+            elif montosolicitado < 0:
+                
+                if montosolicitado < -0.009:
+                    return montosolicitado
+                else:
+                    print ("El monto no puede ser mas grande que -0.009")
+                
+            else:
+                print ("El monto no puede ser igual a 0")
+        
+        except ValueError as e:
+            print ("El programa no admite letras, ingrese el monto en numeros")
         
         except Exception as e:
             print (f"Error tipo:{type(e).__name__} \n", e)
@@ -647,7 +695,8 @@ def DepuradordeDuplicado(duplicados1, duplicados2, datoaescribir, datosexistente
                 limpiarpantalla()
                 
             else:
-                print(f'\nOpcion"{respuesta}" no encontrada, cancelando carga.\n')
+                limpiarpantalla()
+                print(f'\nOpcion"{respuesta}" no encontrada.\n')
 
     if onoffdeconfirmacion == 1:
         print(f'Se a pegado la informacion en la base de datos correctamente')
@@ -711,6 +760,7 @@ while onoff==1:
         input("Presione ENTER para continuar\n")
         limpiarpantalla()
 
+
     elif cursor=="2" or cursor=="2-": #Agregar un monto a la ficha de activos
         limpiarpantalla()
         print("2-Agregar un monto a la ficha de activos\n\n")
@@ -732,67 +782,49 @@ while onoff==1:
         duplicados2=Chequeoduplicados(solonumliquidacionDB, [numerodeliquidacionsolicitado])
 
         datos_a_pegar=[[añosolicitado, messolicitado, diasolicitado, montosolicitado, numerodeliquidacionsolicitado]]
-#error  
-
+        
         DepuradordeDuplicado(duplicados1, duplicados2, datos_a_pegar, infodatabase)
-
 
 
     elif cursor=="3" or cursor=="3-": #Agregar un monto a la ficha de pasivos
         limpiarpantalla()
         print("3-Agregar un monto a la ficha de pasivos\n\n")
 
-        añosolicitado=int(input("Digite el año:"))
-        messolicitado=int(input("Digite el mes:"))
-        diasolicitado=int(input("Digite el dia:"))
-        montosolicitado=-1*float(input("Digite el monto:"))
-        numerodeliquidacionsolicitado=str(input("Digite el numero de liquidacion:"))
+        fechaenlista=fecha_actualvsingresada()
+
+        añosolicitado=fechaenlista[0]
+        messolicitado=fechaenlista[1]
+        diasolicitado=fechaenlista[2]
+        
+        montosolicitado=SolicitarNuevoP()
+
+        numerodeliquidacionsolicitado=SolicitarNumLiquidacion()
+ 
+        infodatabase=Infodatabase()
+        solonumliquidacionDB=Solonumserie(infodatabase)
+
+        duplicados1=Chequeoduplicados([numerodeliquidacionsolicitado], solonumliquidacionDB)
+        duplicados2=Chequeoduplicados(solonumliquidacionDB, [numerodeliquidacionsolicitado])
 
         datos_a_pegar=[[añosolicitado, messolicitado, diasolicitado, montosolicitado, numerodeliquidacionsolicitado]]
 
-        Escribirbasededatos(datos_a_pegar)
+        DepuradordeDuplicado(duplicados1, duplicados2, datos_a_pegar, infodatabase)
 
-        print(f'Se a pegado "{datos_a_pegar}" correctamente')
-        input("Presione ENTER para continuar\n")
-        limpiarpantalla()
 
     elif cursor=="4" or cursor=="4-": #Copiar info. de "Liquidacion diaria" en "Ficha de activos"
         onoffdeconfirmacion=1
 
         liquidacionescopiadas=CopiarLiquidaciones()
-        infodatabasecopiada=Infodatabase()
-        Solonumserie(liquidacionescopiadas)
-        Solonumserie(infodatabasecopiada)
+        infodatabase=Infodatabase()
 
-        duplicados=Chequeoduplicados(liquidacionescopiadas, infodatabasecopiada)
-        print(duplicados)
+        solonumliquidacionDB=Solonumserie(infodatabase)
+        solonumliquidacionLIQ=Solonumserie(liquidacionescopiadas)
 
-        if duplicados == False:
-            Escribirbasededatos(liquidacionescopiadas, "a")
-        
-        else:
-            print("Se encontraron numeros de liquidacion duplicados con respecto a la base de datos.")
-            print("1-Para omitir los importes duplicados\n0-Para cancelar")
-            respuesta=input("1/0:")                             #se podra cambiar el nombre respuesta por cursor?,  Revisar
-            print("\n")
-            if respuesta == "1":                                  #posibilidad de recortar codigo,                Revisar
-                for i  in duplicados:
-                    liquidacionescopiadas.pop(i)
-                Escribirbasededatos(liquidacionescopiadas)               #TESTEAR YA!!
-            elif respuesta == "0":                                   #Misma posibilidad de recortar                     
-                onoffdeconfirmacion=0
-            else:
-                print(f'Opcion"{respuesta}" no encontrada, cancelando carga.')
-                onoffdeconfirmacion=0
+        duplicados1=Chequeoduplicados(solonumliquidacionLIQ, solonumliquidacionDB)
+        duplicados2=Chequeoduplicados(solonumliquidacionDB, solonumliquidacionLIQ)
 
-        if onoffdeconfirmacion == 1:
-            print(f'Se a pegado el contenido de "Liquidaciones" en la base de datos correctamente')
-            input("Presione ENTER para continuar\n")
-            limpiarpantalla()
-        else:
-            print ("Se a Cancelado la carga de liquidacion en la base de datos.")
-            input("Presione ENTER para continuar\n")
-            limpiarpantalla()
+        DepuradordeDuplicado(duplicados1, duplicados2, liquidacionescopiadas, infodatabase)
+
 
     elif cursor=="9" or cursor=="9-": #Salir
         limpiarpantalla()
@@ -800,6 +832,7 @@ while onoff==1:
         print("Buenas noches")
         time.sleep(1)
         onoff=0
+
 
     else:           #Error cursor fuera de los parametros
         limpiarpantalla()
