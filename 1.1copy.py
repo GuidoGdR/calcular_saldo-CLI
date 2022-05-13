@@ -29,6 +29,42 @@ def mostrarmenu():
 def Delistastr(lista, caracter):                    
     return caracter.join(map(str, lista))
 
+def ExtraerporIndice(lista, indices):
+    resultado=[]
+    for i in indices:
+        resultado+=[lista[i]]
+    return resultado
+    
+def deCSVaHuman(listaenlista):
+    
+    """
+     _summary_
+     
+     Ingresa una lista dentro de otra lista y devuelve 1 solo STR con un formato mas amigable al humano
+     
+     Args:
+     listaenlista _ALL_:Lista dentro de otra oista [["ej"]]
+
+    Returns:
+        _STR_: el contenido de el input en formato: año/mes/dia $monto |ID:NumdeLiquidacion
+    """
+    
+    total=""
+    
+    for i in listaenlista:
+        listarapida=i
+
+        añorapido=str(listarapida[0])
+        añorapidoSTR=str(añorapido)
+        
+        mesrapido=str(listarapida[1])
+        diarapido=str(listarapida[2])
+        montorapido=str(listarapida[3])
+        liquidacionrapido=str(listarapida[4])
+        
+        total+=añorapido + "/" + mesrapido + "/" + diarapido + "  $" + montorapido + "|ID: " + liquidacionrapido+ "\n"
+    return total
+
 def Escribirbasededatos(texto, m):                 #Escribe en la base de datos lo que le pasas en lugar de "texto"
 
     """
@@ -300,7 +336,7 @@ def Solonumserie(listaenlista):            #retorna solo el numero de serie (le 
         solonumserieR+=[linea[4]]           #establecemos que el numero de serie o numero unico está en la posicion 
     return solonumserieR
 
-def Chequeoduplicados2(numliquidacion, listasdelistas):     #un contador que mide cuantas veces aparece un str en una lista de listas (revisar si funciona con listas sin estar dentro de listas)
+def Contadorduplicados2(numliquidacion, listasdelistas):     #un contador que mide cuantas veces aparece un str en una lista de listas (revisar si funciona con listas sin estar dentro de listas)
     contador=0
     for lista in listasdelistas:
         if numliquidacion in lista:
@@ -495,7 +531,6 @@ def SolicitarNuevoA ():
         except Exception as e:
             print (f"Error tipo:{type(e).__name__} \n", e)
 
-
 def SolicitarNumLiquidacion():
     
     """
@@ -544,9 +579,10 @@ def DepuradordeDuplicado(duplicados1, duplicados2, datoaescribir, datosexistente
         datoaescribir ([STR,STR,STR,STR,STR]): Lista con el registro a escribir indicando [año, mes, dia, monto, num de liquidacion(ID)] 
         datosexistentes ([[str,..][str,..]]): Lista con listas que contienen los registros originales
     """
-
+    onoffdeconfirmacion=1
+    print("\n\n\n")
     if duplicados1 == False and duplicados2 == False:
-        Escribirbasededatos(datoaescribir)
+        Escribirbasededatos(datoaescribir, "a")
     
     elif duplicados1 == False and duplicados2 != False or duplicados2 == False and duplicados1 != False:
         print ("Error al intentar chequear la existencia de duplicados")
@@ -555,18 +591,26 @@ def DepuradordeDuplicado(duplicados1, duplicados2, datoaescribir, datosexistente
     
     else:
         traba1=1
-        print("Se encontraron numeros de liquidacion duplicados con respecto a la base de datos.")
-        print("1-Omitir los NUEVOS importes duplicados\n2-Eliminar los importes duplicados EXISTENTES\n0-Para CANCELAR")
-        print("H-Texto un poco mas extenso descriptivo de opciones")
-        respuesta=str(input("1/2/0:"))
-        print("\n\n")
+
+        duplicadoslista1=ExtraerporIndice(datoaescribir, duplicados1)
+        duplicadostexto1=deCSVaHuman(duplicadoslista1)
+
+        duplicadoslista2=ExtraerporIndice(datosexistentes, duplicados2)
+        duplicadostexto2=deCSVaHuman(duplicadoslista2)
         
         while traba1 == 1:
+            print("Segun los Numeros de liquidacion, se encontraron los siguientes registros duplicados:")
+            print (f"Registros NUEVOS duplicados:\n{duplicadostexto1}")
+            print (f"Registros EXISTENTES duplicados:\n{duplicadostexto2}")
+            print("1-Omitir los NUEVOS importes duplicados\n2-Eliminar los importes duplicados EXISTENTES\n0-Para CANCELAR")
+            print("H-Texto un poco mas extenso descriptivo de opciones")
+            respuesta=str(input("1/2/0:"))
+            print("\n\n")
             
             if respuesta == "1":
                 for i  in duplicados1:
                     datoaescribir.pop(i)
-                Escribirbasededatos(datoaescribir)
+                Escribirbasededatos(datoaescribir, "a")
                 traba1=0
             
             elif respuesta == "2":
@@ -574,7 +618,7 @@ def DepuradordeDuplicado(duplicados1, duplicados2, datoaescribir, datosexistente
                     datosexistentes.pop(i)
                 datosexistentes+=datoaescribir    
                 
-                Escribirbasededatos(datoaescribir)
+                Escribirbasededatos(datosexistentes, "w")
                 traba1=0
             
             elif respuesta == "0":                    
@@ -582,7 +626,12 @@ def DepuradordeDuplicado(duplicados1, duplicados2, datoaescribir, datosexistente
                 traba1=0
             
             elif respuesta == "H" or respuesta == "h":
-                print("1-Elimina el/los registros nuevos que se detectar")
+                print("1-Elimina el/los registros nuevos que se detectaron duplicados antes de ingresar")
+                print("el registro a la Base de Datos")
+                print("2-Elimina los registros ya existentes que causen duplicados con respecto a los nuevos")
+                print("0-Cancela el ingreso de informacion a la Base de Datos (El programa continua sin modificar la base de datos)")
+                input ("Presione ENTER para continuar:")
+                limpiarpantalla()
                 
             else:
                 print(f'\nOpcion"{respuesta}" no encontrada, cancelando carga.\n')
@@ -608,8 +657,9 @@ print("//\tSoftware de uso libre\t//")
 print("//author:GdR\t\t\t   //")
 print("//guidodorego@gmail.com\t\t   //")
 print("/////////////////////////////////////")
-print("//iconos de:https://www.flaticon.es//")
-print("/////////////////////////////////////")
+print("/////////////////////////////////////\n")
+print("iconos de: https://www.flaticon.es")
+
 #time.sleep(1)
 limpiarpantalla()
 
@@ -653,7 +703,7 @@ while onoff==1:
         print("2-Agregar un monto a la ficha de activos\n\n")
 
         fechaenlista=fecha_actualvsingresada()
-        
+
         añosolicitado=fechaenlista[0]
         messolicitado=fechaenlista[1]
         diasolicitado=fechaenlista[2]
@@ -662,34 +712,16 @@ while onoff==1:
         
         numerodeliquidacionsolicitado=SolicitarNumLiquidacion()
         
-        tablap=[numerodeliquidacionsolicitado]
-
         infodatabase=Infodatabase()
         solonumliquidacionDB=Solonumserie(infodatabase)
         
-        
-        print (solonumliquidacionDB)
-        print (tablap)
-        
-        duplicados=Chequeoduplicados(solonumliquidacionDB, tablap)
+        duplicados1=Chequeoduplicados([numerodeliquidacionsolicitado], solonumliquidacionDB)
+        duplicados2=Chequeoduplicados(solonumliquidacionDB, [numerodeliquidacionsolicitado])
 
-        print("//////////////////////////////")
-        
-        print (duplicados)
-        input("AA")
+        datos_a_pegar=[[añosolicitado, messolicitado, diasolicitado, montosolicitado, numerodeliquidacionsolicitado]]
+#error  
 
-        if duplicados == False:
-            pass
-            datos_a_pegar=[[añosolicitado, messolicitado, diasolicitado, montosolicitado, numerodeliquidacionsolicitado]]
-            Escribirbasededatos(datos_a_pegar)  
-            print(f'Se a pegado "{datos_a_pegar}" correctamente')
-            input("Presione ENTER para continuar\n")
-            limpiarpantalla()
-        
-        else:
-            
-            pass
-
+        DepuradordeDuplicado(duplicados1, duplicados2, datos_a_pegar, infodatabase)
 
 
 
