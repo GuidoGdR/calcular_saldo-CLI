@@ -29,7 +29,22 @@ def mostrarmenu():
 def Delistastr(lista, caracter):                    
     return caracter.join(map(str, lista))
 
-def Escribirbasededatos(texto):                 #Escribe en la base de datos lo que le pasas en lugar de "texto"
+def Escribirbasededatos(texto, m):                 #Escribe en la base de datos lo que le pasas en lugar de "texto"
+
+    """
+     _summary_
+     se le pasa un texto y segun el metodo indicado:
+     Elimina el contenido previo de la DB
+     Suma el contenido al lo que previamente contenia la DB
+     
+     m:
+     'a', 'A'= Agregar al archivo existente
+     'w', 'W'= Escribir un nuevo archivo
+     Args:
+     texto ([STR]): Texto dentro de una lista, ocupara un renglon en el archivo csv
+     m (STR): Letra que espesifica el metodo a utilizar en la apertura del archivo
+    """
+
     try:
         if os.name == "nt" or os.name=="dos":
             chequeoos='\\'
@@ -37,7 +52,13 @@ def Escribirbasededatos(texto):                 #Escribe en la base de datos lo 
         elif os.name =="posix":
             chequeoos='/'
 
-        with open(f"config{chequeoos}database.csv", "a", newline="")as archivoacsv:
+        if m == False or m == "a" or m == "A":
+            metodo="a"
+        
+        elif m == "w" or m == "W":
+            metodo="w"
+
+        with open(f"config{chequeoos}database.csv", f"{metodo}", newline="")as archivoacsv:
             escritor=csv.writer(archivoacsv, delimiter=";")
             escritor.writerows(texto)
 
