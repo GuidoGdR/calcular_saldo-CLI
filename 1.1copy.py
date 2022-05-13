@@ -30,6 +30,19 @@ def Delistastr(lista, caracter):
     return caracter.join(map(str, lista))
 
 def ExtraerporIndice(lista, indices):
+    """
+    ExtraerporIndice _summary_
+    Extrae varios elementos de una lista al pasarle los indices enlistados
+
+    Args:
+        lista (Lista): _description_ Una lista de la que se quieran extraer elementos
+        indices ([Indices]): _description_Los indices que indican los elementos que se quieren extraer
+        
+    Returns:
+        _[type]_: _description_Listado compuesto solo de los elementos espesificados con los indices
+    """
+       
+
     resultado=[]
     for i in indices:
         resultado+=[lista[i]]
@@ -755,7 +768,7 @@ while onoff==1:
         print(duplicados)
 
         if duplicados == False:
-            Escribirbasededatos(liquidacionescopiadas)
+            Escribirbasededatos(liquidacionescopiadas, "a")
         
         else:
             print("Se encontraron numeros de liquidacion duplicados con respecto a la base de datos.")
