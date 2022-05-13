@@ -24,6 +24,7 @@ def mostrarmenu():
     print("2-Agregar un monto a la ficha de activos")
     print("3-Agregar un monto a la ficha de pasivos")
     print('4-Copiar info. de "Liquidacion diaria" en "Ficha de activos"')
+    print('5-Mostrar info. de la base de datos en pantalla')
     print("9-Salir\n")
 
 def Delistastr(lista, caracter):                    
@@ -74,7 +75,7 @@ def deCSVaHuman(listaenlista):
 
         liquidacionrapido=str(listarapida[4])
         
-        total+=añorapido + "/" + mesrapido + "/" + diarapido + "  $" + f"{montorapido1:.2f}" + "|ID: " + liquidacionrapido+ "\n"
+        total+=añorapido + "/" + mesrapido + "/" + diarapido + "\t$" + f"{montorapido1:.2f}" + "\t|ID: " + liquidacionrapido+ "\n"
     return total
 
 def Escribirbasededatos(texto, m):                 #Escribe en la base de datos lo que le pasas en lugar de "texto"
@@ -640,6 +641,7 @@ def DepuradordeDuplicado(duplicados1, duplicados2, datoaescribir, datosexistente
         datoaescribir ([STR,STR,STR,STR,STR]): Lista con el registro a escribir indicando [año, mes, dia, monto, num de liquidacion(ID)] 
         datosexistentes ([[str,..][str,..]]): Lista con listas que contienen los registros originales
     """
+    
     onoffdeconfirmacion=1
     print("\n\n\n")
     if duplicados1 == False and duplicados2 == False:
@@ -660,6 +662,9 @@ def DepuradordeDuplicado(duplicados1, duplicados2, datoaescribir, datosexistente
         duplicadostexto2=deCSVaHuman(duplicadoslista2)
         
         while traba1 == 1:
+            
+            
+            
             print("Segun los Numeros de liquidacion, se encontraron los siguientes registros duplicados:")
             print (f"Registros NUEVOS duplicados:\n{duplicadostexto1}")
             print (f"Registros EXISTENTES duplicados:\n{duplicadostexto2}")
@@ -825,6 +830,15 @@ while onoff==1:
 
         DepuradordeDuplicado(duplicados1, duplicados2, liquidacionescopiadas, infodatabase)
 
+    elif cursor == "5" or cursor == "5-": #Mostrar info de DB en pantalla
+        print("\n")
+        infodatabase=Infodatabase()
+        
+        infoDBhuman=deCSVaHuman(infodatabase)
+        
+        print (infoDBhuman)
+        input ("Presione ENTER para continuar:")
+        limpiarpantalla()
 
     elif cursor=="9" or cursor=="9-": #Salir
         limpiarpantalla()
