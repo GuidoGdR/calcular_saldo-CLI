@@ -52,8 +52,8 @@ Funcionamiento:
                 la fecha, el monto y el numero de liquidacion (ID de transaccion)
 
         5-Mostrar info. de base de datos en pantalla
-            muestra un listado con todos los registros que se encuentran en database.csv ordenados segun la fecha 
-            para posicionarlos desde el mas lejano en el futuro al mas lejano en el pasado.
+            muestra un listado con todos los registros que se encuentran en database.csv ordenados segun
+            la fecha para posicionarlos desde el mas lejano en el futuro al mas lejano en el pasado.
  
 
 
