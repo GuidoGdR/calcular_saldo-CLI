@@ -733,9 +733,9 @@ print("//author:GdR\t\t\t   //")
 print("//guidodorego@gmail.com\t\t   //")
 print("/////////////////////////////////////")
 print("/////////////////////////////////////\n")
-print("iconos de: https://www.flaticon.es")
+#print("iconos de: https://www.flaticon.es")
 
-#time.sleep(1)
+time.sleep(2)
 limpiarpantalla()
 
 onoff=1
