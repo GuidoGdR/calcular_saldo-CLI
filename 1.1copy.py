@@ -48,7 +48,7 @@ def ExtraerporIndice(lista, indices):
         resultado+=[lista[i]]
     return resultado
     
-def deCSVaHuman(listaenlista):
+def deListaaSTRH(listaenlista):
     
     """
      _summary_
@@ -656,10 +656,10 @@ def DepuradordeDuplicado(duplicados1, duplicados2, datoaescribir, datosexistente
         traba1=1
 
         duplicadoslista1=ExtraerporIndice(datoaescribir, duplicados1)
-        duplicadostexto1=deCSVaHuman(duplicadoslista1)
+        duplicadostexto1=deListaaSTRH(duplicadoslista1)
 
         duplicadoslista2=ExtraerporIndice(datosexistentes, duplicados2)
-        duplicadostexto2=deCSVaHuman(duplicadoslista2)
+        duplicadostexto2=deListaaSTRH(duplicadoslista2)
         
         while traba1 == 1:
             
@@ -765,7 +765,6 @@ while onoff==1:
         input("Presione ENTER para continuar\n")
         limpiarpantalla()
 
-
     elif cursor=="2" or cursor=="2-": #Agregar un monto a la ficha de activos
         limpiarpantalla()
         print("2-Agregar un monto a la ficha de activos\n\n")
@@ -789,7 +788,6 @@ while onoff==1:
         datos_a_pegar=[[añosolicitado, messolicitado, diasolicitado, montosolicitado, numerodeliquidacionsolicitado]]
         
         DepuradordeDuplicado(duplicados1, duplicados2, datos_a_pegar, infodatabase)
-
 
     elif cursor=="3" or cursor=="3-": #Agregar un monto a la ficha de pasivos
         limpiarpantalla()
@@ -815,7 +813,6 @@ while onoff==1:
 
         DepuradordeDuplicado(duplicados1, duplicados2, datos_a_pegar, infodatabase)
 
-
     elif cursor=="4" or cursor=="4-": #Copiar info. de "Liquidacion diaria" en "Ficha de activos"
         onoffdeconfirmacion=1
 
@@ -834,7 +831,7 @@ while onoff==1:
         print("\n")
         infodatabase=Infodatabase()
         
-        infoDBhuman=deCSVaHuman(infodatabase)
+        infoDBhuman=deListaaSTRH(infodatabase)
         
         print (infoDBhuman)
         input ("Presione ENTER para continuar:")
