@@ -596,7 +596,7 @@ def SolicitarNuevoP():
         
         except Exception as e:
             print (f"Error tipo:{type(e).__name__} \n", e)
-
+            print ("(Por defecto los registros se mostraran ordenados del mas antiguo al mas actual)")
 def SolicitarNumLiquidacion():
     
     """
@@ -665,6 +665,8 @@ def DepuradordeDuplicado(duplicados1, duplicados2, datoaescribir, datosexistente
         duplicadoslista2=ExtraerporIndice(datosexistentes, duplicados2)
         duplicadostexto2=deListaaSTRH(duplicadoslista2)
         
+        cantidadduplicados=len(duplicados1)
+        
         while traba1 == 1:
             
             
@@ -672,7 +674,8 @@ def DepuradordeDuplicado(duplicados1, duplicados2, datoaescribir, datosexistente
             print("Segun los Numeros de liquidacion, se encontraron los siguientes registros duplicados:")
             print (f"Registros NUEVOS duplicados:\n{duplicadostexto1}")
             print (f"Registros EXISTENTES duplicados:\n{duplicadostexto2}")
-            print ("Por defecto los registros se mostraran ordenados del mas antiguo al mas actual.")
+            print (f"Total de duplicados:{cantidadduplicados}")
+            print ("(Por defecto los registros se mostraran ordenados del mas antiguo al mas actual.)")
             print("1-Omitir los NUEVOS importes duplicados\n2-Eliminar los importes duplicados EXISTENTES\n0-Para CANCELAR")
             print("H-Texto un poco mas extenso descriptivo de opciones")
             respuesta=str(input("1/2/0:"))
@@ -839,7 +842,7 @@ while onoff==1:
         infoDBhuman=deListaaSTRH(infodatabase)
         
         print (infoDBhuman)
-        print ("Por defecto los registros se mostraran ordenados del mas antiguo al mas actual.")
+        print ("(Por defecto los registros se mostraran ordenados del mas antiguo al mas actual.)")
         input ("Presione ENTER para continuar:")
         limpiarpantalla()
 
