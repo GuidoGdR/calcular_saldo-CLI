@@ -64,13 +64,17 @@ def deListaaSTRH(listaenlista):
     
     total=""
     
+    
+    listaenlista==listaenlista.sort()
+    
+    
     for i in listaenlista:
         listarapida=i
 
         añorapido=str(listarapida[0])
-        
         mesrapido=str(listarapida[1])
         diarapido=str(listarapida[2])
+        
         montorapido1=float(listarapida[3])
 
         liquidacionrapido=str(listarapida[4])
@@ -668,6 +672,7 @@ def DepuradordeDuplicado(duplicados1, duplicados2, datoaescribir, datosexistente
             print("Segun los Numeros de liquidacion, se encontraron los siguientes registros duplicados:")
             print (f"Registros NUEVOS duplicados:\n{duplicadostexto1}")
             print (f"Registros EXISTENTES duplicados:\n{duplicadostexto2}")
+            print ("Por defecto los registros se mostraran ordenados del mas antiguo al mas actual.")
             print("1-Omitir los NUEVOS importes duplicados\n2-Eliminar los importes duplicados EXISTENTES\n0-Para CANCELAR")
             print("H-Texto un poco mas extenso descriptivo de opciones")
             respuesta=str(input("1/2/0:"))
@@ -834,6 +839,7 @@ while onoff==1:
         infoDBhuman=deListaaSTRH(infodatabase)
         
         print (infoDBhuman)
+        print ("Por defecto los registros se mostraran ordenados del mas antiguo al mas actual.")
         input ("Presione ENTER para continuar:")
         limpiarpantalla()
 
