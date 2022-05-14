@@ -23,7 +23,7 @@ def mostrarmenu():
     print("1-Calcular el saldo que se tendra en una fecha x")
     print("2-Agregar un monto a la ficha de activos")
     print("3-Agregar un monto a la ficha de pasivos")
-    print('4-Copiar info. de "Liquidacion diaria" en "Ficha de activos"')
+    print('4-Copiar info. de "Liquidacion diaria" en la base de datos')
     print('5-Mostrar info. de la base de datos en pantalla')
     print("9-Salir\n")
 
