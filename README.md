@@ -1,4 +1,4 @@
-# 🔮 `calcular_saldo` - Proyector de Saldos Futuros
+# 🔮 `calcular_saldo-CLI` - Proyector de Saldos Futuros
 
 **Programa de consola (CLI) para estimar saldos financieros en una fecha futura a partir de registros de transacciones.**
 
@@ -84,3 +84,4 @@ Esta opción automatiza la carga de datos bancarios.
 La información de saldos y transacciones se gestiona a través del archivo:
 
 * **`database.csv`**: Almacena los registros de transacciones (activos/pasivos) para el cálculo de saldos.
+
