@@ -1,61 +1,86 @@
-# calcular_saldo-1-
+# 🔮 `calcular_saldo` - Proyector de Saldos Futuros
 
-//////////////////////////////////
-// Software de uso libre /////////
-//-----------------------/////////
-//author:GdR             /////////
-//guidodorego@gmail.com  /////////
-//////////////////////////////////
+**Programa de consola (CLI) para estimar saldos financieros en una fecha futura a partir de registros de transacciones.**
 
+---
 
+## 🚀 Requisitos y Configuración Inicial
 
-programa para calcular saldos que se tendra en una fecha futura (sin interfaz grafica).
-**************************************************************************************
+Para que el programa funcione, es necesario crear una carpeta llamada `config` en el directorio raíz del proyecto.
 
-Requiere una carpeta "config": dentro de la que podremos alojar el archivo "Liquidación diaria.csv" tal y como se descarga de la pagina de el banco.
----------------------------------------------------------------------------------------------------------------------------------------------------
+Dentro de esta carpeta `config`, podrás alojar el archivo de liquidación bancaria, el cual debe nombrarse:
 
+* **`Liquidación diaria.csv`**: Archivo que se descarga directamente de la página del banco.
 
-Funcionamiento:
-    Al iniciar el programa detectara automaticamente si existe o no el database.csv, de no existir intentara crearlo.
-        *De no existir la carpeta config el programa se cerrara y pedira su creacion
-    OPCIONES:
-        1-Calcular el saldo que se tendra en una fecha x
-            Solicita una fecha (La cual debe ser mayor a la fecha actual que marca el sistema), posteriormente
-            suma todos los activos y le resta todos los pasivos que indican los registros son: posteriores a la 
-            fecha actual y inferiores o iguales a la fecha solicitada
+> ⚠️ **Nota Importante:**
+> Si la carpeta `config` no existe, el programa **se cerrará** y solicitará su creación para poder continuar.
 
-        2-Agregar un monto a la ficha de activos
-            Solicita una fecha (La cual debe ser mayor a la fecha actual que marca el sistema), un monto (el cual
-            debe ser positivo) y un ID o numero de liquidación.
-            Posteriormente chequea que el numero de liquidacion no se encuentre ya en la base de datos:
-            De no existir:
-                pega la informacion dentro de el archivo database.csv
-            De existir:
-                Muestra cuales son los duplcados y da opciones para eliminar los registros duplicados existentes
-                o los nuevos que estarian intentando de entrara a database.csv
-        
-        3-Agregar un monto a la ficha de activos
-            Solicita una fecha (La cual debe ser mayor a la fecha actual que marca el sistema), un monto (de ser 
-            positivo lo transforama en negativo) y un ID o numero de liquidación.
-            Posteriormente chequea que el numero de liquidacion no se encuentre ya en la base de datos:
-            De no existir:
-                pega la informacion dentro de el archivo database.csv
-            De existir:
-                Muestra cuales son los duplcados y da opciones para eliminar los registros duplicados existentes
-                o los nuevos que estarian intentando de entrara a database.csv
-        
-        4-Copiar info, de "liquidaciónes diarias" en la base de datos
-            Copia la informacion de el archivo "Liquidaciónes diarias" (el cual el banco entrega tal como se 
-            muestra en el archivo "Ejemplo-Liquidación diaria.csv") y la pega en el archivo database.csv
-                De el archivo "Liquidación diaria.csv" el programa tomara los segmentos 0, 9 y 2 para obtener 
-                la fecha, el monto y el numero de liquidacion (ID de transaccion)
+---
 
-        5-Mostrar info. de base de datos en pantalla
-            muestra un listado con todos los registros que se encuentran en database.csv ordenados segun
-            la fecha para posicionarlos desde el mas lejano en el futuro al mas lejano en el pasado.
- 
+## ⚙️ Funcionamiento General
 
+Al iniciar, el programa realiza una verificación:
 
+1.  **Verificación de Base de Datos:** Detecta automáticamente la existencia del archivo `database.csv`.
+2.  **Creación (si es necesario):** Si `database.csv` no existe, el programa intentará crearlo.
 
+---
 
+## 📝 Opciones del Programa
+
+El sistema presenta un menú con las siguientes funcionalidades:
+
+### 1. Calcular Saldo a una Fecha Específica 🗓️
+
+* **Solicita:** Una **fecha futura** (debe ser mayor a la fecha actual del sistema).
+* **Proceso:** Suma todos los **activos** y resta todos los **pasivos** registrados cuyas fechas sean:
+    * Posteriores a la fecha actual.
+    * Inferiores o iguales a la fecha solicitada.
+
+### 2. Agregar un Monto a la Ficha de Activos (Ingreso) ➕
+
+* **Solicita:**
+    * Una **fecha futura** (mayor a la fecha actual).
+    * Un **monto positivo**.
+    * Un **ID** o **Número de Liquidación**.
+* **Verificación de Duplicados:** Chequea si el Número de Liquidación ya existe en `database.csv`.
+    * **Si NO existe:** Pega la información en `database.csv`.
+    * **Si SÍ existe:**
+        * Muestra los registros duplicados.
+        * Ofrece opciones para **eliminar** los registros duplicados existentes o **descartar** el nuevo registro.
+
+### 3. Agregar un Monto a la Ficha de Pasivos (Egreso) ➖
+
+* **Solicita:**
+    * Una **fecha futura** (mayor a la fecha actual).
+    * Un **monto** (si es positivo, se transforma internamente a negativo).
+    * Un **ID** o **Número de Liquidación**.
+* **Verificación de Duplicados:** Chequea si el Número de Liquidación ya existe en `database.csv`.
+    * **Si NO existe:** Pega la información en `database.csv`.
+    * **Si SÍ existe:**
+        * Muestra los registros duplicados.
+        * Ofrece opciones para **eliminar** los registros duplicados existentes o **descartar** el nuevo registro.
+
+### 4. Copiar Información de "Liquidaciones Diarias" a la Base de Datos 🔄
+
+Esta opción automatiza la carga de datos bancarios.
+
+* **Origen:** Lee la información del archivo **`Liquidación diaria.csv`** (el cual tiene un formato similar al del archivo de ejemplo: `Ejemplo-Liquidación diaria.csv`).
+* **Destino:** Pega la información extraída en **`database.csv`**.
+* **Campos Relevantes (Índices CSV):** El programa toma los siguientes segmentos del archivo de origen para construir el registro:
+    * **Segmento 0:** Fecha
+    * **Segmento 9:** Monto
+    * **Segmento 2:** Número de Liquidación (ID de Transacción)
+
+### 5. Mostrar Información de la Base de Datos en Pantalla 📊
+
+* Muestra un listado de **todos los registros** contenidos en `database.csv`.
+* Los registros se muestran **ordenados por fecha**, desde el más lejano en el **futuro** hasta el más lejano en el **pasado**.
+
+---
+
+## 🛠️ Estructura de Datos
+
+La información de saldos y transacciones se gestiona a través del archivo:
+
+* **`database.csv`**: Almacena los registros de transacciones (activos/pasivos) para el cálculo de saldos.
